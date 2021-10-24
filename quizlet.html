@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+        <link href="https://cdn.quilljs.com/1.3.6/quill.snow.css" rel="stylesheet">
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.13.18/dist/katex.min.css" integrity="sha384-zTROYFVGOfTw7JV7KUu8udsvW2fx4lWOsCEDqhBreBwlHI4ioVRtmIvEThzJHGET" crossorigin="anonymous">
+
+        <style>
+            body{
+                background-color: #cccccc;
+            }
+            .ql-toolbar {
+                background-color: #d2d2d3;
+            }
+            .material-icons:hover{
+                color:red;
+                max-width:1em;
+                display:inline;
+                overflow: hidden;
+                position:absolute;
+                cursor: pointer;
+            }
+        </style>
+    </head>
+    <body>
+        <button id='start_set'>Create/Upload Cardset</button> 
+        <button id='export_but' style='display:none'>Export Cardset</button>
+        <div id='zone1' style='display:none;'>
+            <div id='zone11'></div>
+        </div>
+        
+
+        <!--Third party scripts-->
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+        <script src="https://cdn.quilljs.com/1.3.6/quill.js"></script>
+        <script defer src="https://cdn.jsdelivr.net/npm/katex@0.13.18/dist/katex.min.js" integrity="sha384-GxNFqL3r9uRJQhR+47eDxuPoNE7yLftQM8LcxzgS4HT73tp970WS/wV5p8UzCOmb" crossorigin="anonymous"></script>
+        <!--My Scripts-->
+        <script src='script.js'></script>
+    </body>
+</html>
