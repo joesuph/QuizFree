@@ -1,3 +1,6 @@
+import React from 'react';
+import ReactDOM from 'react-dom';
+
 var cardset = null;
 var quills = [];
 
@@ -186,9 +189,7 @@ function readCardIntoDiv(text,i)
 
     //If new cardset, leave cards empty
     if (text == null)
-    {
         return;
-    }
 
     //separate term from definition
     var pair = text.split('\\>').map((t)=>{return JSON.parse(t)})
