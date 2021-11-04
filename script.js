@@ -1,19 +1,21 @@
-var cardset = null;
-var quills = [];
+var cards = [];
+var taggedCards = {};
 
-//Set Cardset
-$('#start_set').click(()=>{
-    var window = $("<div></div>").css({
-        'position':'absolute',
-        'margin':'auto',
-        'height':'3em',
-        'top':'2em',
-        'left':'20%',
-        'align-items':'center',
-        'background-color':'#efefef',
-        'box-shadow': '5px 5px 5px grey',
-        'padding':'2em'
-    })
+/**
+ * When create/upload button is clicked,
+ *   1. provide options of upload or create new in popup window
+ *   2. Initiate card session
+ */
+$('#start_set').click(function(){
+
+
+    //Transition button
+   $(this).addClass('start_set_left')
+
+    //Create window html
+    var window = $("<div></div>").attr('id','select_upload_type_window')
+
+    //Seup exist button for this popup window
     var exitButt = $('<span class="material-icons">cancel</span>').css({
             'position':'absolute',
             'right':'0',
@@ -24,9 +26,10 @@ $('#start_set').click(()=>{
     .mouseleave((e)=>{e.target.style.color='grey';})
     window.append(exitButt)
     
-
+    //Create buttons for options and set what they do
+    //    
     var new_set_butt = $('<button>Create New</button>').click(()=>{
-        cardset = [null]
+        cards = [null]
         window.hide()
         updateBody();
         
@@ -34,11 +37,9 @@ $('#start_set').click(()=>{
     var upload_set_butt = $('<input type=\'file\' id=\'file_input\'>').change(()=>{
         var fr = new FileReader();
         fr.onload = ()=>{
-            var text = fr.result;
-            window.hide()
-            cardset = text.split('\\]').slice(0,-1)
+            cards = JSON.parse(fr.result)
+            window.hide() 
             updateBody();
-            
         }
         fr.readAsText($('#file_input')[0].files[0])
     })
@@ -48,102 +49,75 @@ $('#start_set').click(()=>{
 
 }) 
 
-//Provide interaction options and show card fields
+/**
+ * 
+ * @summary 
+ * @param {*} interaction 
+ */
 function updateBody(interaction=1)
 {
     //Create task buttons
-    var butt1 = $('<button>Practice</button>').click(()=>{updateBody(2)});
-    var butt2 = $('<button>Edit</button>').click(()=>{updateBody(1)});
     //Create interaction section
-    $('#zone1').html('').append(butt1,butt2,'<div id=\'zone11\'></div>').show().css({
-        'border':'1px solid black',
-        'margin':'auto',
-        'margin-top':'3em',
-        'width':'90%'
-    });
+    $('#zone1').html('').append('<div id=\'zone11\'></div>').show()
 
-    if (interaction==1)
-    {
-        //start default interaction
-        edit()
-    }
-    else if (interaction==2){
-        practice()
-    }
+    edit()
 
     //Convert inputs of fields to strings, create file, and download
     $('#export_but').show().click(()=>{
-        var data = "";
-        for(var i=0;i<quills.length;i++)
-        {
-            data += JSON.stringify(quills[i][0].getContents()) + "\\>" + JSON.stringify(quills[i][1].getContents()) + "\\]";
-        }
-        download(data, 'cardset.txt', 'text/plain')
+        download(JSON.stringify(cards.map(card=>card.map(side=>side.getContents()))), 'cardset.txt', 'text/plain')
     })
-}
-
-function practice()
-{
-    
 }
 
 /* Start edit mode*/
 function edit()
 {
-    //Set styles
-    var div_style="width:100%;display:grid;grid-template-columns:auto auto;overflow:hidden;margin-top:2em;\
-    border:1px solid black;position:relative;background-color:#fafafa;border-radius:1em";
-    var wrapper_div_style = "overflow:visible;height:15em;position:relative;width:45vw;border-radius:5em"
-
-
     //convert each cardset item to html and add to zone11
-    for (var i=0;i<cardset.length;i++)
+    for (var i=0;i<cards.length;i++)
     {
         //Populate base html template 
         var html = 
-            `<div style="${div_style}" id="pair_${i}">
-                <div style="${wrapper_div_style}">
+            `<div id="pair_${i}" class="pair">
+                <div class='term_wrapper'>
                     <div id="term_${i}" class="term"></div>
                 </div>
-                <div style="${wrapper_div_style}">
+                <div class='term_wrapper'>
                     <div id="def_${i}" class="def"></div>
                 </div>
-                <span class="material-icons" onclick="$('#pair_${i}').remove()" style='position:absolute;right:0'>delete</span>
+                <span class="material-icons" onclick="$('#pair_${i}').remove()" style='position:absolute;right:0;top:.5em;'>delete</span>
             <div>`
         //Add base html
         $('#zone11').append(html)
-
         //Populate base html with content
-        readCardIntoDiv(cardset[i],i)
+        readCardIntoDiv(cards[i],i)
     }
 
     $('#zone1').append(
         $('<button id=\'add\'>Add new term</button>').click(()=>{
             //Populate base html template 
             
-            cardset.push(null)
-            var i=cardset.length-1;
+            cards.push(null)
+            var i=cards.length-1;
             var html = 
-            `<div style="${div_style}" id="pair_${i}">
-                <div style="${wrapper_div_style}">
+            `<div id="pair_${i}" class="pair">
+                <div class='term_wrapper'>
                     <div id="term_${i}" class="term"></div>
                 </div>
-                <div style="${wrapper_div_style}">
+                <div class='term_wrapper'>
                     <div id="def_${i}" class="def"></div>
                 </div>
-                <span class="material-icons" onclick="$('#pair_${i}').remove();quills.splice(${i},1)" style='position:absolute;right:0'>delete</span>
+                <span class="material-icons" onclick="$('#pair_${i}').remove();quills.splice(${i},1)" style='position:absolute;right:0;top:.5em;'>delete</span>
             <div>`
             
             $('#zone11').append(html)   
             
-            readCardIntoDiv(cardset[i],i)        
+            readCardIntoDiv(cards[i],i)        
     
         }
     ))
 }
 
 
-function readCardIntoDiv(text,i)
+function readCardIntoDiv(card,i)
 {
     //Create toolbar options for card rich text editors
     var toolbarOptions = [
@@ -182,21 +156,14 @@ function readCardIntoDiv(text,i)
     });
     init_image_button(term_quill)
     init_image_button(def_quill)
-    //Store quills to grab content later when needed
-    quills.push([term_quill,def_quill])
 
-    //If new cardset, leave cards empty
-    if (text == null)
-        return;
-
-    //separate term from definition
-    var pair = text.split('\\>').map((t)=>{return JSON.parse(t)})
-    var term = pair[0]
-    var definition = pair[1]
-
-    term_quill.setContents(term)
-    def_quill.setContents(definition)
-    
+    if (card != null)
+    {
+        term_quill.setContents(card[0])
+        def_quill.setContents(card[1])
+    }
+    cards[i] = ([term_quill,def_quill])
+   
 }
 
 // Function to download data to a file
@@ -217,6 +184,7 @@ function download(data, filename, type) {
         }, 0); 
     }
 }
+
 //Get upload
 //display fields
 

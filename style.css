@@ -1,0 +1,104 @@
+body{
+    background-color: #cccccc;
+    font-family: Arial, Helvetica, sans-serif;
+}
+.ql-toolbar {
+    background-color: #d2d2d3;
+}
+.material-icons:hover{
+    color:red;
+    max-width:1em;
+    display:inline;
+    overflow: hidden;
+    position:absolute;
+    cursor: pointer;
+}
+#start_set{
+    box-sizing: border-box;
+    display:block;
+    margin-left: calc(50% - 15vw);
+    cursor:pointer;
+    background-color: aquamarine;
+    border: 1px solid black;
+    border-radius: 1em;
+    text-align: center;
+    width:30vw;
+    font-size: 1.5em;
+    transition: background-color 0s, font-size 2s, margin-left 2s, width 2s, display 2s, padding 2s;
+}
+
+#start_set.start_set_left{
+    font-size:1em;
+    margin-left:0;
+    margin-top:.5em;
+    max-width:13em;
+    display:inline-block;
+    padding:.5em
+}
+#start_set:hover{
+    background-color: rgb(41, 251, 181);
+}
+
+#select_upload_type_window{
+    box-sizing: border-box;
+    position:absolute;
+    left: calc(50vw - 13em);
+    width:25em;
+    height:5em;
+    top:5em;
+    align-items:center;
+    display: flex;
+    justify-content: space-around;
+    background-color:#efefef;
+    box-shadow:5px 5px 5px grey;
+    padding:.5em;
+    padding-right:0;
+}
+
+#zone1{
+    margin:auto;
+    margin-top:1em;
+    padding:1em
+}
+
+#add{
+    margin-top:1em;
+}
+.pair{
+    display:flex;
+    overflow-y: hidden;
+    margin-top:2em;
+    box-sizing:border-box;
+    border:1px solid black;
+    position:relative;
+    background-color:#fafafa;
+    border-radius:1em;
+    box-shadow:rgba(0, 0, 0, 0.387) 2px 2px 2px;
+    width:100%;
+    flex-direction: row;;
+}
+
+.ql-toolbar{
+    max-height:30%;
+    overflow-y: auto;
+}
+.ql-editor{
+    max-height: 70%;
+}
+.term_wrapper{
+    box-sizing: border-box;
+    height:15em;
+    max-width:50%;
+}
+@media screen and (max-width: 700px) {
+    .pair{
+        display:block;
+        flex-wrap: wrap;
+    }
+    .term_wrapper{
+        box-sizing: border-box;
+        height:15em;
+        max-width:100%;
+        overflow-y: hidden;
+    }
+}
