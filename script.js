@@ -162,7 +162,7 @@ function readCardIntoDiv(text,i)
         [{ 'font': [] }],
         [{ 'align': [] }],
       
-        ['image','link','formula','video','clean']                                         // remove formatting button
+        ['myImage','link','formula','video','clean']                                         // remove formatting button
       ];
 
     //Setup cards as rich text editors
@@ -180,7 +180,8 @@ function readCardIntoDiv(text,i)
     placeholder: 'Enter a definition...',
     theme: 'snow'  // or 'bubble'
     });
-
+    init_image_button(term_quill)
+    init_image_button(def_quill)
     //Store quills to grab content later when needed
     quills.push([term_quill,def_quill])
 
