@@ -163,6 +163,7 @@ body{
     border:1px solid blue;
     border-radius:1em;
     padding:1em;
+    cursor: pointer;
 }
 #practice_incorrect{
     box-sizing: border-box;
@@ -173,4 +174,8 @@ body{
     border:1px solid blue;
     border-radius:1em;
     padding:1em;
+    cursor: pointer;
 }
+
+#practice_correct:hover{background-color:rgb(65, 187, 231);}
+#practice_incorrect:hover{background-color:rgb(65, 187, 231);}

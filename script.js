@@ -110,7 +110,7 @@ function edit()
                 <div class='term_wrapper'>
                     <div id="def_${i}" class="def"></div>
                 </div>
-                <span class="material-icons" onclick="$('#pair_${i}').remove()" style='position:absolute;right:0;top:.5em;'>delete</span>
+                <span class="material-icons" onclick="$('#pair_${i}').remove();cards.splice(${i},1)" style='position:absolute;right:0;top:.5em;'>delete</span>
             <div>`
         //Add base html
         $('#zone11').append(html)
@@ -132,7 +132,7 @@ function edit()
                 <div class='term_wrapper'>
                     <div id="def_${i}" class="def"></div>
                 </div>
-                <span class="material-icons" onclick="$('#pair_${i}').remove();quills.splice(${i},1)" style='position:absolute;right:0;top:.5em;'>delete</span>
+                <span class="material-icons" onclick="$('#pair_${i}').remove();cards.splice(${i},1)" style='position:absolute;right:0;top:.5em;'>delete</span>
             <div>`
             
             $('#zone11').append(html)   
