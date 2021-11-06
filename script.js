@@ -1,5 +1,8 @@
 var cards = [];
 var taggedCards = {};
+var interactionMode = 'edit';
+
+var practice_quill = null;
 
 /**
  * When create/upload button is clicked,
@@ -31,6 +34,7 @@ $('#start_set').click(function(){
     var new_set_butt = $('<button>Create New</button>').click(()=>{
         cards = [null]
         window.hide()
+        setupModeSwitch()
         updateBody();
         
     })
@@ -39,6 +43,7 @@ $('#start_set').click(function(){
         fr.onload = ()=>{
             cards = JSON.parse(fr.result)
             window.hide() 
+            setupModeSwitch()
             updateBody();
         }
         fr.readAsText($('#file_input')[0].files[0])
@@ -49,23 +54,45 @@ $('#start_set').click(function(){
 
 }) 
 
-/**
- * 
- * @summary 
- * @param {*} interaction 
- */
-function updateBody(interaction=1)
+
+function updateBody()
 {
     //Create task buttons
     //Create interaction section
     $('#zone1').html('').append('<div id=\'zone11\'></div>').show()
 
-    edit()
+    
+    if (interactionMode == 'edit')
+        edit()
+    else
+    {
+        practice()
+    }
 
     //Convert inputs of fields to strings, create file, and download
     $('#export_but').show().click(()=>{
         download(JSON.stringify(cards.map(card=>card.map(side=>side.getContents()))), 'cardset.txt', 'text/plain')
     })
+}
+
+function setupModeSwitch()
+{
+    var button = $('#start_set').clone().attr('id','modeSwitch').addClass('edit').text('Practice').click(function(){
+       
+       if (interactionMode=='edit')
+       {
+            $('#modeSwitch').attr('class','practice').text('Edit')
+            interactionMode = 'practice';
+            updateBody()
+       }
+       else
+       {
+            $('#modeSwitch').attr('class','edit').text('Practice')
+            interactionMode = 'edit';
+            updateBody()
+       }
+    })
+    $('#zone1').before(button)
 }
 
 /* Start edit mode*/
@@ -88,7 +115,7 @@ function edit()
         //Add base html
         $('#zone11').append(html)
         //Populate base html with content
-        readCardIntoDiv(cards[i],i)
+        setUpQuillForCardDivs(cards[i],i)
     }
 
     $('#zone1').append(
@@ -110,14 +137,91 @@ function edit()
             
             $('#zone11').append(html)   
             
-            readCardIntoDiv(cards[i],i)        
+            setUpQuillForCardDivs(cards[i],i)        
     
         }
     ))
 }
 
 
-function readCardIntoDiv(card,i)
+//Display card one at a time in random order and keep score
+function practice()
+{
+    var practiceOrder = [...Array(cards.length).keys()];
+    shuffleArray(practiceOrder);
+    var correct = 0;
+    var incorrect = 0;
+    var card_side = 0; //start with term
+
+    //Create the div for this section
+    var practice_card = $('<div id=\'practice_card\'></div>')
+    var practice_incorrect = $('<div>Incorrect</div>').attr('id', 'practice_incorrect')
+    var practice_correct = $('<div>Correct</div>').attr('id', 'practice_correct')
+    var current_index = 0;
+
+    //Add sections zone11
+    $('#zone11').append(practice_card,practice_incorrect,practice_correct)
+
+    //Create Quill for card_div
+    practice_quill = new Quill('#practice_card', {
+        modules: {
+          toolbar: false
+        },
+        placeholder: '',
+        theme: 'snow'  // or 'bubble'
+      });
+    practice_quill.disable();
+    $(practice_quill.container.children[0]).addClass('practice')
+
+    practice_quill.setContents(cards[practiceOrder[0]][0].getContents())
+
+    practice_card.click(function(){
+        if (card_side ==0)
+        {
+            practice_quill.setContents(cards[practiceOrder[current_index]][1].getContents())
+            card_side=1;
+        }
+        else
+        {
+            practice_quill.setContents(cards[practiceOrder[current_index]][0].getContents())
+            card_side=0;
+        }
+    })
+
+    practice_correct.click(function(){
+        correct++;
+        current_index++;
+        if (current_index < practiceOrder.length)
+        {
+            practice_quill.setContents(cards[practiceOrder[current_index]][0].getContents())
+            card_side=0;
+        }
+        else
+        {
+            alert(`You got ${correct} correct and ${incorrect} incorrect.`)
+            updateBody()
+        }
+    })
+
+    practice_incorrect.click(function(){
+        incorrect++;
+        current_index++;
+        if (current_index < practiceOrder.length)
+        {
+            practice_quill.setContents(cards[practiceOrder[current_index]][0].getContents())
+            card_side=0;
+        }
+        else
+        {
+            alert(`You got ${correct} correct and ${incorrect} incorrect.`)
+            updateBody()
+        }
+    })
+
+}
+
+
+function setUpQuillForCardDivs(card,i)
 {
     //Create toolbar options for card rich text editors
     var toolbarOptions = [
@@ -136,7 +240,7 @@ function readCardIntoDiv(card,i)
         [{ 'font': [] }],
         [{ 'align': [] }],
       
-        ['myImage','link','formula','video','clean']                                         // remove formatting button
+        ['myImage','link','formula','video','clean']      // remove formatting button
       ];
 
     //Setup cards as rich text editors
@@ -154,13 +258,21 @@ function readCardIntoDiv(card,i)
     placeholder: 'Enter a definition...',
     theme: 'snow'  // or 'bubble'
     });
+
     init_image_button(term_quill)
     init_image_button(def_quill)
 
     if (card != null)
     {
-        term_quill.setContents(card[0])
-        def_quill.setContents(card[1])
+        if (typeof card[i].getContents === 'function')
+        {
+            term_quill.setContents(card[0].getContents())
+            def_quill.setContents(card[1].getContents())
+        }
+        else{
+            term_quill.setContents(card[0])
+            def_quill.setContents(card[1])
+        }
     }
     cards[i] = ([term_quill,def_quill])
    
@@ -185,6 +297,13 @@ function download(data, filename, type) {
     }
 }
 
+/**Taken from https://stackoverflow.com/a/12646864 */
+function shuffleArray(array) {
+    for (let i = array.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [array[i], array[j]] = [array[j], array[i]];
+    }
+}
 //Get upload
 //display fields
 

@@ -75,7 +75,7 @@ body{
     border-radius:1em;
     box-shadow:rgba(0, 0, 0, 0.387) 2px 2px 2px;
     width:100%;
-    flex-direction: row;;
+    flex-direction: row;
 }
 
 .ql-toolbar{
@@ -90,6 +90,16 @@ body{
     height:15em;
     max-width:50%;
 }
+
+#practice{
+    font-size:1em;
+    margin-left:0;
+    margin-top:.5em;
+    max-width:13em;
+    display:inline-block;
+    padding:.5em
+}
+
 @media screen and (max-width: 700px) {
     .pair{
         display:block;
@@ -101,4 +111,66 @@ body{
         max-width:100%;
         overflow-y: hidden;
     }
+}
+
+#modeSwitch{
+    cursor:pointer;
+    position:absolute;
+    right:1em;
+    border: 1px solid black;
+    border-radius: 1em;
+    text-align: center;
+    font-size:1em;
+    margin-left:0;
+    margin-top:.5em;
+    max-width:13em;
+    display:inline-block;
+    padding:.5em;
+    transition-duration: 1s;
+}
+
+#modeSwitch.practice {
+    background-color: rgb(255, 232, 127);
+}
+#modeSwitch.practice:hover{
+    background-color: rgb(253, 218, 63);
+}
+
+#modeSwitch.edit {
+    background-color: rgb(127, 206, 255);
+}
+#modeSwitch.edit:hover{
+    background-color: rgb(87, 186, 248);
+}
+
+#practice_card{
+    margin: auto;
+    overflow: hidden;
+    width:20em;
+    background-color:beige;
+    height: 30em;
+}
+.practice.ql-editor{
+    max-height: 100%;
+}
+
+#practice_correct{
+    box-sizing: border-box;
+    display: inline-block;
+    margin-left:2em;
+    width: 6em;
+    background-color:rgb(126, 221, 255);
+    border:1px solid blue;
+    border-radius:1em;
+    padding:1em;
+}
+#practice_incorrect{
+    box-sizing: border-box;
+    display: inline-block;
+    margin-left:calc(50% - 7em);
+    width: 6em;
+    background-color:rgb(126, 221, 255);
+    border:1px solid blue;
+    border-radius:1em;
+    padding:1em;
 }
