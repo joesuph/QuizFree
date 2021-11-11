@@ -4,8 +4,6 @@ Static Web-browser application, this is like quizlet but with free features that
 
 Test out the application [here](https://joesuph.github.io/QuizFree/index.html)
 
-Future Goals:
-1. Add practice capability
-2. Fix edit button to not reset cardset
-3. Make look pretty and attractive
-4. Add user created tags to cards
+## Goals
+  See Project Board
+
