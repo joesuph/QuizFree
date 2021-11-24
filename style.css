@@ -147,9 +147,11 @@ body{
     margin: auto;
     overflow: hidden;
     width:20em;
+    resize: horizontal;
     background-color:beige;
     height: 30em;
 }
+
 .practice.ql-editor{
     max-height: 100%;
 }
