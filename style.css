@@ -55,6 +55,10 @@ body{
     padding-right:0;
 }
 
+#export_filename{
+    width: 7em;
+}
+
 #zone1{
     margin:auto;
     margin-top:1em;

@@ -70,8 +70,9 @@ function updateBody()
     }
 
     //Convert inputs of fields to strings, create file, and download
-    $('#export_but').show().click(()=>{
-        download(JSON.stringify(cards.map(card=>card.map(side=>side.getContents()))), 'cardset.txt', 'text/plain')
+    $('#export_but_wrapper').show()
+    $('#export_but').click(()=>{
+        download(JSON.stringify(cards.map(card=>card.map(side=>side.getContents()))), $('#export_filename').val(), 'text/plain')
     })
 }
 
