@@ -260,9 +260,6 @@ function setUpQuillForCardDivs(card,i)
     theme: 'snow'  // or 'bubble'
     });
 
-    init_image_button(term_quill)
-    init_image_button(def_quill)
-
     if (card != null)
     {
         if (typeof card[i].getContents === 'function')
